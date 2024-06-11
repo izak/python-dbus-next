@@ -760,9 +760,12 @@ class BaseMessageBus:
                 for method in ServiceInterface._get_methods(interface):
                     if method.disabled:
                         continue
-                    if msg._matches(interface=interface.name,
-                                    member=method.name,
-                                    signature=method.in_signature):
+                    if msg.interface is None and msg._matches(
+                            member=method.name,
+                            signature=method.in_signature
+                        ) or msg._matches(interface=interface.name,
+                                          member=method.name,
+                                          signature=method.in_signature):
                         handler = self._make_method_handler(interface, method)
                         break
                 if handler:
